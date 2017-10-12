@@ -1,12 +1,12 @@
 #Sprite Classes
+
 from Constants import *
 import pygame as pg
+import math
 
 vec = pg.math.Vector2
 
 class Player(pg.sprite.Sprite):
-
-
     def __init__(self, game, objectWidth, objectHeight):
         pg.sprite.Sprite.__init__(self)
         self.game = game
@@ -69,9 +69,54 @@ class Platform(pg.sprite.Sprite):
         self.rect.y = y
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self, xy_pos):
+    def __init__(self, xy_pos, player_x, player_y,object_height):
         pg.sprite.Sprite.__init__(self)
+        self.starting_x = player_x
+        self.starting_y = player_y
         self.xy_pos = xy_pos
-        self.image = pg.Surface((2,10))
-        self.image.fill(YELLOW)
+        self.image = pg.Surface((10,10))
+        self.image.fill(RED)
         self.rect = self.image.get_rect()
+        self.rect.x = self.starting_x
+        self.rect.y = self.starting_y-object_height
+
+        #self.rect.x = player_x
+        #self.rect.y = player_y-object_height
+        self.orig = self.rect.y
+        self.x_increment = 0
+        self.change_x = 0
+        self.change_y = 0
+        #finding out the distance
+
+
+
+    def update(self):
+        self.slope = (self.xy_pos[1]-self.starting_y)/(self.xy_pos[0]-self.starting_x)
+        if self.xy_pos[0] > self.starting_x:
+            self.rect.x += self.x_increment
+            self.rect.y += self.slope * self.x_increment
+        else:
+            self.rect.x -= self.x_increment
+            self.rect.y += self.slope * -self.x_increment
+        self.x_increment += 1
+        if self.rect.x > WIDTH or self.rect.y < 0:
+            self.rect.x,self.rect.y = 0,0
+
+
+
+        """
+            bullet_vec = vec(self.xy_pos[0]-self.starting_x, self.xy_pos[1] - self.starting_y)
+            self.distance = math.sqrt(((bullet_vec[0]) ** 2 + (bullet_vec[1]) ** 2))
+            bullet_vec_x = (bullet_vec[0]/ self.distance)
+            bullet_vec_y = (bullet_vec[1]/self.distance)
+            self.change_x += bullet_vec_x
+            self.change_y += bullet_vec_y
+            #print(bullet_vec_x, bullet_vec_y)
+
+            self.starting_x += self.change_x
+            self.starting_y += self.change_y
+            self.rect.x = self.starting_x
+            self.rect.y = self.starting_y
+        """
+
+

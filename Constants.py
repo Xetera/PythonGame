@@ -6,11 +6,12 @@ BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 YELLOW = (255, 255, 0)
 
+
 #window information
 HEIGHT = 480
 WIDTH = 360
 FPS = 60
-TITLE = 'olol making a game in python? kids.'
+TITLE = 'olol making a game in python.'
 
 #player information
 PLAYER_ACC = 2

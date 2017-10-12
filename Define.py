@@ -22,7 +22,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
         self.all_bullets = pg.sprite.Group()
-        self.player = Player(self, 15,40)
+        self.player = Player(self, 15, 40)
         self.all_sprites.add(self.player)
 
         #adding platforms
@@ -36,13 +36,13 @@ class Game:
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
-            #print("1")
+
             self.events()
-            #print("2")
+
             self.update()
-            #print("3")
+
             self.draw()
-            #print("41")
+
 
     def update(self):
         self.all_sprites.update()
@@ -65,15 +65,17 @@ class Game:
                     self.player.jump()
             if event.type == pg.MOUSEBUTTONDOWN:
                 xy_pos = event.pos
-                self.bullet = Bullet(xy_pos)
+                self.bullet = Bullet(xy_pos, self.player.rect.center[0], self.player.rect.center[1],
+                                     self.player.object_height/3)
                 self.all_sprites.add(self.bullet)
                 self.all_bullets.add(self.bullet)
+                #if Bullet.update().rect.y > 0:
+                #    self.all_sprites.remove(Bullet.rect)
 
 
 
     def draw(self):
         self.gameDisplay.fill(BLACK)
-        pg.draw.rect(self.gameDisplay, BLACK, [Movement.lead_x, Movement.lead_y, 10, 10])
         self.all_sprites.draw(self.gameDisplay)
         pg.display.update()
 
@@ -82,11 +84,11 @@ class Game:
     def show_go_screen(self):
         pass
 
+if __name__ =='__main__':
+    g = Game()
+    g.show_start_screen()
+    while g.running:
+        g.new()
+        g.show_go_screen()
 
-g = Game()
-g.show_start_screen()
-while g.running:
-    g.new()
-    g.show_go_screen()
-
-pg.quit()
+    pg.quit()
